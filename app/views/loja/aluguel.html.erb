@@ -1,0 +1,145 @@
+<div class='container'>
+  <div class='row'>
+    <form action="/alugar/<%= @veiculo.id %>" method='POST'>
+      <div class='row'>
+        <div class='col-lg-7 itemLista'>
+          <div class='col-lg-4'>
+            <p style=' text-align: center; font-weight: bold; font-size: 1.5em;'><%= @veiculo.nome %></p>
+            <img src='https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/cars/cars-subcontent/04-images/novo-onix-branco-summit.png' style='max-width: 100%;'>
+          </div>
+          <div class='col-lg-6 detalhesContainer'>
+            <div class='detalhesVeiculo'>
+              <p class="card-text">Qntd Passageiros</p>
+              <p><%= @veiculo.qnt_passageiros %></p>
+            </div>
+            <div class='detalhesVeiculo'>
+              <p class="card-text">Marca</p>
+              <p><%= @veiculo.marca.nome %></p>
+            </div>
+            <div class='detalhesVeiculo'>
+              <p class="card-text">Cor</p>
+              <p><%= @veiculo.cor %></p>
+            </div>
+          </div>
+          <div class='col-lg-6 ofertasInfo'>
+            <h4>Incluso no preço:</h4>
+            <div class='row'>
+              <div class='col-sm-12'>
+                <div class='row'>
+                  <div class='col-lg-7'>
+                    <p>Melhor preço Garantido</p>
+                  </div>
+                  <div class='col-lg-7'>
+                    <p>Sem taxa de alteração</p>
+                  </div>
+                </div>
+                <div class='row'>
+                  <p>Taxas da Locadora</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='col-lg-4 pagamentoContainer'>
+            <div class='col-sm-12'>
+              <div class='row' style='border-bottom: 1px solid #fff;'>
+                <p style=' text-align: center; font-weight: bold; font-size: 1.5em;'><%= @veiculo.nome %></p>
+              </div>
+              <dl class="dl-horizontal" style='text-align: center;'>
+                <dt>Valor/Dia</dt>
+                <dd>
+                  <%= number_to_currency(@veiculo.valor) %>
+                </dd>
+                <dt>Qnt Dias</dt>
+                <dd>
+                  <select name="dias" id="dias" class="custom-select" style='max-width:90px;' onchange="atualizaTotal(<%= @veiculo.valor %>)">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                  </select>
+                </dd>
+                <dt>Valor Total</dt>
+                <dd>
+                  <p id='valorTotal'><%= number_to_currency(@veiculo.valor) %></p>
+                </dd>
+              </dl>
+            </div>
+            <input type="submit" value="Alugar" class='btn btn-success' style='margin: auto; display: block; padding: 9px 32px; font-size: 1.2em;'>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-sm-12' style='max-width: 500px; margin: auto;'>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= label_tag :cardNumber,"Número do Cartão" %>
+              <input type="number" class='form-control' name='cardNumber'>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= label_tag :cardName,"Nome no Cartão" %>
+              <input type="text" class='form-control' name='cardName'>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= label_tag :expirationDate,"Data de validade" %>
+              <input type="date" class='form-control' name='expirationDate'>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= label_tag :cvv,"CVV" %>
+              <input type="number" class='form-control' name='cvv'>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form> 
+  </div>
+</div>
+
+<script>
+  function atualizaTotal(valorVeiculo) {
+    const qntDias = document.getElementById('dias').value;
+    document.getElementById('valorTotal').innerText = "R$" + parseInt(qntDias) * valorVeiculo;
+  }
+</script>
+
+<style>
+  .pagamentoContainer {
+    background-color: #ccc;
+    margin-left: 25px;
+    padding: 15px;
+    min-height: 250px;
+  }
+
+  .ofertasInfo {
+    padding-left: 5%;
+  }
+
+  .ofertasInfo p, .ofertasInfo h4{
+    color: green;
+  }
+  .itemLista {
+    background-color: #ccc;
+    padding: 15px;
+    min-height: 250px;
+  }
+
+  .detalhesContainer {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+  }
+
+  .detalhesContainer .card-text {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+</style>

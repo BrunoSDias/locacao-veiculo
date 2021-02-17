@@ -1,0 +1,32 @@
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+            <th>Veiculo</th>
+            <th>Cliente</th>
+            <th>Tempo de espera</th>
+            <th>Valor alugado</th>
+            <th>Reservado de</th>
+            <th>Reservado ate</th>
+            <th>Pagamento no destino</th>
+            <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @reservas) do |reserva| %>
+            <td><a href='/veiculos/<%= reserva.veiculo.id%>'><%= reserva.veiculo.nome %></a></td>
+            <td><a href='/clientes/<%= reserva.cliente.id %>%'> <%= reserva.cliente.nome %></a></td>
+            <td><%= reserva.tempo_de_espera %></td>
+            <td><%= reserva.valor_alugado %></td>
+            <td><%= reserva.reservado_de %></td>
+            <td><%= reserva.reservado_ate %></td>
+            <td><%= reserva.pagamento_no_destino %></td>
+            <td><%= link_to 'Mostrar', reserva %></td>
+        <td><%= link_to 'Remover', reserva, method: :delete, data: { confirm: 'Tem certeza?' } %></td>
+      <% end %>
+    </tbody>
+  </table>
+</div>

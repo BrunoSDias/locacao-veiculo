@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nome: MyString
+  cor: MyString
+  qnt_passageiros: 1
+  placa: MyString
+  valor: 9.99
+  marca: one
+
+two:
+  nome: MyString
+  cor: MyString
+  qnt_passageiros: 1
+  placa: MyString
+  valor: 9.99
+  marca: two

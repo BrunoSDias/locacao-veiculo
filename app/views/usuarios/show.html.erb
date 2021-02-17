@@ -1,0 +1,32 @@
+<div class="page-header">
+  <%= link_to usuarios_path, class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Voltar
+  <% end %>
+  <%= link_to edit_usuario_path(@usuario), class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Alterar
+  <% end %>
+  <h1>Mostrar usuario</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Nome:</dt>
+  <dd><%= @usuario.nome %></dd>
+
+  <dt>Cpf:</dt>
+  <dd><%= @usuario.cpf %></dd>
+
+  <dt>Endereco:</dt>
+  <dd><%= @usuario.endereco %></dd>
+
+  <dt>Numero:</dt>
+  <dd><%= @usuario.numero %></dd>
+
+  <dt>Cep:</dt>
+  <dd><%= @usuario.cep %></dd>
+
+  <dt>Estado:</dt>
+  <dd><%= @usuario.estado %></dd>
+
+</dl>

@@ -1,0 +1,35 @@
+<div class="page-header">
+  <%= link_to reservas_path, class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Voltar
+  <% end %>
+  <%= link_to edit_reserva_path(@reserva), class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Alterar
+  <% end %>
+  <h1>Mostrar reserva</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Veiculo:</dt>
+  <dd><%= @reserva.veiculo %></dd>
+
+  <dt>Cliente:</dt>
+  <dd><%= @reserva.cliente %></dd>
+
+  <dt>Tempo de espera:</dt>
+  <dd><%= @reserva.tempo_de_espera %></dd>
+
+  <dt>Valor alugado:</dt>
+  <dd><%= @reserva.valor_alugado %></dd>
+
+  <dt>Reservado de:</dt>
+  <dd><%= @reserva.reservado_de %></dd>
+
+  <dt>Reservado ate:</dt>
+  <dd><%= @reserva.reservado_ate %></dd>
+
+  <dt>Pagamento no destino:</dt>
+  <dd><%= @reserva.pagamento_no_destino %></dd>
+
+</dl>

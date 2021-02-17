@@ -1,0 +1,39 @@
+<div class="page-header">
+  <%= link_to new_cliente_path, class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    Novo Cliente
+  <% end %>
+  <h1>Listando clientes</h1>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+            <th>Nome</th>
+            <th>Cpf</th>
+            <th>Cep</th>
+            <th>Estado</th>
+            <th>Rua</th>
+            <th>Numero</th>
+            <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @clientes) do |cliente| %>
+            <td><%= cliente.nome %></td>
+            <td><%= cliente.cpf %></td>
+            <td><%= cliente.cep %></td>
+            <td><%= cliente.estado %></td>
+            <td><%= cliente.rua %></td>
+            <td><%= cliente.numero %></td>
+            <td><%= link_to 'Mostrar', cliente %></td>
+        <td><%= link_to 'Editar', edit_cliente_path(cliente) %></td>
+        <td><%= link_to 'Remover', cliente, method: :delete, data: { confirm: 'Tem certeza?' } %></td>
+      <% end %>
+    </tbody>
+  </table>
+</div>
