@@ -16,9 +16,14 @@ class LojaController < UsuariosController
       if params[:dias].present?
         dias = params[:dias].to_i
         @valor_total = dias * @veiculo.valor
-        reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: cookies[:usuario])
-        if reserva.save!
-          redirect_to "/confirmacao_pagamento/#{reserva.id}"
+        if cookies[:usuario].present?
+          reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: cookies[:usuario])
+          if reserva.save!
+            redirect_to "/confirmacao_pagamento/#{reserva.id}"
+            return
+          end
+        else
+          redirect_to "/login"
           return
         end
       end
