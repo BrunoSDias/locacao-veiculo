@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'usuarios_administrador/index'
   get 'login/sigin'
   get 'login/cadastrar'
   get '/login', to: 'login#login'
@@ -8,7 +9,8 @@ Rails.application.routes.draw do
   get '/loja/locacao/:id', to: 'loja#aluguel'
   post 'alugar/:id', to: 'loja#alugar'
   get '/confirmacao_pagamento/:reserva_id', to: 'loja#confirmacao_pagamento'
-  resources :usuarios, except: [:show]
+  resources :usuarios, except: [:show, :index]
+  resources :usuarios_administradors
   get 'administrador/login', to: 'login_administrador#login'
   post 'administrador/logar', to: 'login_administrador#logar'
   get 'administrador/logout', to: 'login_administrador#logout'

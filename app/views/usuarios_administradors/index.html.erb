@@ -1,0 +1,39 @@
+<div class="page-header">
+  <%= link_to new_usuarios_administrador_path, class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    Novo Usuario
+  <% end %>
+  <h1>Listando usuarios</h1>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Cpf</th>
+        <th>Endereco</th>
+        <th>Numero</th>
+        <th>Cep</th>
+        <th>Estado</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @usuarios) do |usuario| %>
+        <td><%= usuario.nome %></td>
+        <td><%= usuario.cpf %></td>
+        <td><%= usuario.endereco %></td>
+        <td><%= usuario.numero %></td>
+        <td><%= usuario.cep %></td>
+        <td><%= usuario.estado %></td>
+        <td><%= link_to 'Mostrar', usuarios_administrador_path(usuario) %></td>
+        <td><%= link_to 'Editar', edit_usuarios_administrador_path(usuario) %></td>
+        <td><%= link_to 'Remover', usuarios_administrador_path(usuario), method: :delete, data: { confirm: 'Tem certeza?' } %></td>
+      <% end %>
+    </tbody>
+  </table>
+</div>

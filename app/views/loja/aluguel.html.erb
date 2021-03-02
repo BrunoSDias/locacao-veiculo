@@ -68,7 +68,7 @@
                 </dd>
               </dl>
             </div>
-            <input type="submit" value="Alugar" class='btn btn-success' style='margin: auto; display: block; padding: 9px 32px; font-size: 1.2em;'>
+            <input type="submit" value="Alugar" class='btn btn-success' style='margin: auto; display: block; padding: 9px 32px; font-size: 1.2em;' onclick="finalizaPagamento(event, <%= @veiculo.valor %>, <%= @veiculo.id %>)">
         </div>
       </div>
       <div class='row'>
@@ -76,25 +76,25 @@
           <div class="form-group">
             <div class="col-sm-12">
               <%= label_tag :cardNumber,"Número do Cartão" %>
-              <input type="number" class='form-control' name='cardNumber'>
+              <input type="text" class='form-control credit_card' name='cardNumber' id='cardNumber'>
             </div>
           </div>
           <div class="form-group">
             <div class="col-sm-12">
               <%= label_tag :cardName,"Nome no Cartão" %>
-              <input type="text" class='form-control' name='cardName'>
+              <input type="text" class='form-control' name='cardName' id='cardName'>
             </div>
           </div>
           <div class="form-group">
             <div class="col-sm-12">
               <%= label_tag :expirationDate,"Data de validade" %>
-              <input type="date" class='form-control' name='expirationDate'>
+              <input type="month" class='form-control' name='expirationDate' id='expirationDate'>
             </div>
           </div>
           <div class="form-group">
             <div class="col-sm-12">
               <%= label_tag :cvv,"CVV" %>
-              <input type="number" class='form-control' name='cvv'>
+              <input type="text" class='form-control cvv' name='cvv' id='cvv'>
             </div>
           </div>
         </div>
@@ -104,9 +104,105 @@
 </div>
 
 <script>
+  $('.credit_card').mask('0000.0000.0000.0000');
+  $('.cvv').mask('000');
+
+  PagSeguroDirectPayment.setSessionId("<%= @session_id %>" );
+
   function atualizaTotal(valorVeiculo) {
     const qntDias = document.getElementById('dias').value;
     document.getElementById('valorTotal').innerText = "R$" + parseInt(qntDias) * valorVeiculo;
+  }
+
+  function finalizaPagamento(e, valor_veiculo, veiculo_id) {
+    e.preventDefault();
+    const cardNumber = document.getElementById('cardNumber').value;
+    const cardNumberFiltered = cardNumber.replaceAll('.', '');
+    const bin = cardNumberFiltered.substring(0, 6)
+
+    const cardName = document.getElementById('cardName').value;
+
+    const expirationDate = document.getElementById('expirationDate').value;
+    const expirationMonth = expirationDate.split('-')[1];
+    const expirationYear = expirationDate.split('-')[0];
+
+    const cvv = document.getElementById('cvv').value;
+
+    const qntDias = document.getElementById('dias').value;
+    const valorTotal = valor_veiculo * qntDias;
+
+    PagSeguroDirectPayment.getPaymentMethods({
+        amount: valorTotal,
+        success: function(response) {
+          PagSeguroDirectPayment.onSenderHashReady(function(response){
+            if(response.status == 'error') {
+                console.log(response.message);
+                return false;
+            }
+            var hash = response.senderHash;
+            setTimeout(function(){
+              PagSeguroDirectPayment.getBrand({
+                cardBin: bin,
+                success: function(response) {
+                  console.log(response)
+                  const brand = response.brand.name
+                  PagSeguroDirectPayment.getInstallments({
+                      amount: valorTotal,
+                      maxInstallmentNoInterest: 12,
+                      brand: brand,
+                      success: function(response){
+                        console.log(response);
+                        PagSeguroDirectPayment.createCardToken({
+                          cardNumber: cardNumberFiltered, // Número do cartão de crédito
+                          brand: brand, // Bandeira do cartão
+                          cvv: cvv, // CVV do cartão
+                          expirationMonth: expirationMonth, // Mês da expiração do cartão
+                          expirationYear: expirationYear, // Ano da expiração do cartão, é necessário os 4 dígitos.
+                          success: function(response) {
+                            $.post("/alugar/" + veiculo_id, {
+                              dias: qntDias,
+                              token: response.card.token
+                            }, function(data, status) {
+                              console.log(data);
+                            })
+                            console.log(response);
+                            // Retorna o cartão tokenizado.
+                          },
+                          error: function(response) {
+                            alert("Erro ao tentar gerar token de cartão de crédito");
+                          },
+                          complete: function(response) {
+                            console.log(response);
+                            // Callback para todas chamadas.
+                          }
+                        });
+                    },
+                      error: function(response) {
+                        alert("Erro ao verificar quantidade de parcelas disponíveis");
+                    },
+                      complete: function(response){
+                        console.log(response);
+                    }
+                  });
+                },
+                error: function(response) {
+                  alert("Erro ao checar bandeira de cartão de crédito")
+                },
+                complete: function(response) {
+                  //tratamento comum para todas chamadas
+                }
+              });
+            }, 5000)
+        });
+        },
+        error: function(response) {
+          alert("Erro ao gerar Hash de Pagamento");
+
+        },
+        complete: function(response) {
+
+        }
+    });
   }
 </script>
 

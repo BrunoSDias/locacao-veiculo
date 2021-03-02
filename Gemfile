@@ -26,6 +26,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'record_tag_helper', '~> 1.0'
 gem 'bootstrap-generators', '~> 3.3.4'
 gem 'credit_card_validator', '~> 1.3', '>= 1.3.2'
+gem 'httparty'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
