@@ -8,6 +8,7 @@
             <th>Valor alugado</th>
             <th>Reservado de</th>
             <th>Reservado ate</th>
+            <th>Status de pagamento</th>
             <th>Pagamento no destino</th>
             <th></th>
         <th></th>
@@ -18,11 +19,12 @@
     <tbody>
       <%= content_tag_for(:tr, @reservas) do |reserva| %>
             <td><a href='/veiculos/<%= reserva.veiculo.id%>'><%= reserva.veiculo.nome %></a></td>
-            <td><a href='/clientes/<%= reserva.cliente.id %>%'> <%= reserva.cliente.nome %></a></td>
+            <td><a href='/usuarios/<%= reserva.usuario.id %>%'> <%= reserva.usuario.nome %></a></td>
             <td><%= reserva.tempo_de_espera %></td>
             <td><%= reserva.valor_alugado %></td>
             <td><%= reserva.reservado_de %></td>
             <td><%= reserva.reservado_ate %></td>
+            <td><%= reserva.status %></td>
             <td><%= reserva.pagamento_no_destino %></td>
             <td><%= link_to 'Mostrar', reserva %></td>
         <td><%= link_to 'Remover', reserva, method: :delete, data: { confirm: 'Tem certeza?' } %></td>

@@ -3,4 +3,8 @@ class Usuario < ApplicationRecord
   def self.login(login, senha)
     Usuario.find_by(login: login, senha: senha) rescue nil
   end
+
+  def clear_cpf
+    cpf.gsub('-', '').gsub('.', '')
+  end
 end

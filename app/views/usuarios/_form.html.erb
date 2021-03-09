@@ -19,6 +19,12 @@
     </div>
   </div>
   <div class="form-group">
+    <%= f.label :data_nascimento, "Data de Nascimento", class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_field :data_nascimento, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
     <%= f.label :cpf, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.text_field :cpf, class: "form-control cpf" %>
@@ -40,6 +46,24 @@
     <%= f.label :cep, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.text_field :cep, class: "form-control cep" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :bairro, class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :bairro, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :cidade, class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :cidade, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :complemento, class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :complemento, class: "form-control" %>
     </div>
   </div>
   <div class="form-group">

@@ -130,10 +130,11 @@
 
     const qntDias = document.getElementById('dias').value;
     const valorTotal = valor_veiculo * qntDias;
-
+    debugger;
     PagSeguroDirectPayment.getPaymentMethods({
         amount: valorTotal,
         success: function(response) {
+          debugger;
           PagSeguroDirectPayment.onSenderHashReady(function(response){
             if(response.status == 'error') {
                 console.log(response.message);
@@ -161,7 +162,8 @@
                           success: function(response) {
                             $.post("/alugar/" + veiculo_id, {
                               dias: qntDias,
-                              token: response.card.token
+                              token: response.card.token,
+                              senderHash: hash,
                             }, function(data, status) {
                               console.log(data);
                             })
