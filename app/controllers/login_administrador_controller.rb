@@ -1,6 +1,5 @@
 class LoginAdministradorController < ApplicationController
   layout 'login'
-  skip_before_action :verify_authenticity_token, only: :logar
 
   def login
     if cookies[:administrador].present?

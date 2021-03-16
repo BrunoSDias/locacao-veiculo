@@ -10,10 +10,9 @@
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-            <th>Nome</th>
-            <th>Login</th>
-            <th>Senha</th>
-            <th></th>
+        <th>Nome</th>
+        <th>Login</th>
+        <th></th>
         <th></th>
         <th></th>
       </tr>
@@ -21,10 +20,9 @@
 
     <tbody>
       <%= content_tag_for(:tr, @administradors) do |administrador| %>
-            <td><%= administrador.nome %></td>
-            <td><%= administrador.login %></td>
-            <td><%= administrador.senha %></td>
-            <td><%= link_to 'Mostrar', administrador %></td>
+        <td><%= administrador.nome %></td>
+        <td><%= administrador.login %></td>
+        <td><%= link_to 'Mostrar', administrador %></td>
         <td><%= link_to 'Editar', edit_administrador_path(administrador) %></td>
         <td><%= link_to 'Remover', administrador, method: :delete, data: { confirm: 'Tem certeza?' } %></td>
       <% end %>

@@ -39,7 +39,7 @@ class UsuariosController < ApplicationController
   def update
     respond_to do |format|
       if @usuario.update(usuario_params)
-        format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
+        format.html { redirect_to '/', notice: 'Usuario was successfully updated.' }
         format.json { render :show, status: :ok, location: @usuario }
       else
         format.html { render :edit }

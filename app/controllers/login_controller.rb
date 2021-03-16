@@ -1,5 +1,4 @@
 class LoginController < UsuariosController
-  skip_before_action :verify_authenticity_token, only: :logar
   
   def sigin
   end
@@ -11,13 +10,16 @@ class LoginController < UsuariosController
   end
 
   def logar
-    usuario = Usuario.login(params[:login], params[:senha])
+    usuario = Usuario.find_by_login(params[:login])
+
     if usuario.present?
-      cookies[:usuario] = usuario.id
-      redirect_to '/'
-    else
-      render :login
+      if usuario.senha == params[:senha]
+        cookies[:usuario] = usuario.id
+        redirect_to '/'
+        return
+      end
     end
+    render :login
   end
 
   def logout
