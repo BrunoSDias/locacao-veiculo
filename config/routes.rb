@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post 'alugar/:id', to: 'loja#alugar'
   get '/confirmacao_pagamento/:reserva_id', to: 'loja#confirmacao_pagamento'
   post '/finalizar_pagamento', to: 'loja#finalizar_pagamento'
+  post "/login", to: 'login#login_api'
   resources :usuarios, except: [:show, :index]
   resources :usuarios_administradors
   get 'administrador/login', to: 'login_administrador#login'
