@@ -9,6 +9,16 @@ class LoginController < UsuariosController
   def login
   end
 
+
+  def login_api
+    usuario = Usuario.login(login_params[:email], login_params[:senha])
+    if usuario.present?
+      render json: {usuario: usuario}, status: :ok
+    else
+      render json: {status: "Não tem permissão"}, status: :unauthorized
+    end
+  end
+
   def logar
     usuario = Usuario.find_by_login(params[:login])
 
@@ -25,5 +35,10 @@ class LoginController < UsuariosController
   def logout
     cookies[:usuario] = nil
     redirect_to '/'
+  end
+
+  private
+  def login_params
+    params.require(:usuario).permit(:email, :senha)
   end
 end
