@@ -48,7 +48,11 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="card h-100">
-                <a href="/loja/locacao/<%= veiculo.id %>"><img class="card-img-top imgCarros" src="https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/cars/cars-subcontent/04-images/novo-onix-branco-summit.png?imwidth=960" alt=""></a>
+                <a href="/loja/locacao/<%= veiculo.id %>">
+                  <% if veiculo.foto.attached? %>
+                    <%= image_tag veiculo.foto, class: "card-img-top imgCarros" %>
+                  <% end %>
+                </a>
                 <div class="card-body">
                   <h4 class="card-title">
                     <a href="#"><%= veiculo.nome %></a>

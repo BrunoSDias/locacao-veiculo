@@ -28,6 +28,7 @@ class VeiculosController < AdministradorsController
 
     respond_to do |format|
       if @veiculo.save
+        @veiculo.foto.attach(params[:veiculo][:foto])
         format.html { redirect_to @veiculo, notice: 'Veiculo foi criado com sucesso.' }
         format.json { render :show, status: :created, location: @veiculo }
       else
@@ -69,6 +70,6 @@ class VeiculosController < AdministradorsController
 
     # Only allow a list of trusted parameters through.
     def veiculo_params
-      params.require(:veiculo).permit(:nome, :cor, :qnt_passageiros, :placa, :valor, :marca_id)
+      params.require(:veiculo).permit(:nome, :cor, :qnt_passageiros, :placa, :valor, :marca_id, :foto)
     end
 end

@@ -38,7 +38,6 @@ class LojaController < UsuariosController
   end
 
   def finalizar_pagamento
-    debugger
     if params[:token_pagamento].present? && params[:reserva_id].present? && params[:hash_comprador].present?
       reserva = Reserva.find(params[:reserva_id])
       veiculo = reserva.veiculo

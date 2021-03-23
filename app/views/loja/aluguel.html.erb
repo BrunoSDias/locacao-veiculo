@@ -130,11 +130,9 @@
 
     const qntDias = document.getElementById('dias').value;
     const valorTotal = valor_veiculo * qntDias;
-    debugger;
     PagSeguroDirectPayment.getPaymentMethods({
         amount: valorTotal,
         success: function(response) {
-          debugger;
           PagSeguroDirectPayment.onSenderHashReady(function(response){
             if(response.status == 'error') {
                 console.log(response.message);

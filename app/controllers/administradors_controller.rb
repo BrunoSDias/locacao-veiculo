@@ -1,5 +1,4 @@
 class AdministradorsController < ApplicationController
-  before_action :set_administrador, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_admin!
 
   def authenticate_admin!
@@ -17,6 +16,7 @@ class AdministradorsController < ApplicationController
   # GET /administradors/1
   # GET /administradors/1.json
   def show
+    set_administrador
   end
 
   # GET /administradors/new
@@ -26,6 +26,7 @@ class AdministradorsController < ApplicationController
 
   # GET /administradors/1/edit
   def edit
+    set_administrador
   end
 
   # POST /administradors
@@ -47,6 +48,7 @@ class AdministradorsController < ApplicationController
   # PATCH/PUT /administradors/1
   # PATCH/PUT /administradors/1.json
   def update
+    set_administrador
     respond_to do |format|
       if @administrador.update(administrador_params)
         format.html { redirect_to @administrador, notice: 'Administrador was successfully updated.' }
@@ -61,6 +63,7 @@ class AdministradorsController < ApplicationController
   # DELETE /administradors/1
   # DELETE /administradors/1.json
   def destroy
+    set_administrador
     @administrador.destroy
     respond_to do |format|
       format.html { redirect_to administradors_url, notice: 'Administrador was successfully destroyed.' }
