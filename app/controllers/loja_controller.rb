@@ -1,12 +1,13 @@
 class LojaController < UsuariosController
   skip_before_action :verify_authenticity_token, only: [:alugar, :finalizar_pagamento]
-  before_action :set_veiculo, only: [:aluguel, :alugar]
+  before_action :set_veiculo, only: [:aluguel, :alugar, :alugar_guest]
   before_action :set_token_pagamento, only: :aluguel
 
   def index
   end
 
   def aluguel
+    @usuario_id = cookies[:usuario]
   end
 
   def alugar
@@ -27,6 +28,27 @@ class LojaController < UsuariosController
       end
     end
     redirect_to "/loja/locacao/#{@veiculo.id}", notice: 'Houve um erro ao ir a tela de confirmação'
+  end
+
+  def alugar_guest
+    usuario = Usuario.find_by_login(params[:login])
+    if usuario.present?
+      if usuario.senha == params[:senha]
+        cookies[:usuario] = usuario.id
+        if params[:dias].present? && params[:token].present? && params[:senderHash].present?
+          dias = params[:dias].to_i
+          token_pagamento = params[:token]
+          hash_comprador = params[:senderHash]
+          @valor_total = dias * @veiculo.valor
+          reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: usuario.id)
+          if reserva.save!
+            redirect_to "/confirmacao_pagamento/#{reserva.id}?token_pagamento=#{token_pagamento}&hash_comprador=#{hash_comprador}"
+            return
+          end
+        end
+        redirect_to "/loja/locacao/#{@veiculo.id}", notice: 'Houve um erro ao ir a tela de confirmação'
+      end
+    end
   end
 
   def confirmacao_pagamento
@@ -89,12 +111,18 @@ class LojaController < UsuariosController
       
       if response.code == 200
         reserva.update(status: Reserva::STATUS[:pago])
+        redirect_to "/finalizado?reserva_id=#{reserva.id}"
       end
 
       puts response
       return
     end
     render json: {error: [message: "Token de pagamento não preenchido ou veiculo não selecionado"]}, status: 401
+  end
+
+  def finalizado
+    @reserva = Reserva.find(params[:reserva_id])
+    @veiculo = @reserva.veiculo
   end
 
   private
@@ -106,6 +134,6 @@ class LojaController < UsuariosController
   end
 
   def set_veiculo
-    @veiculo = Veiculo.find(params[:id])
+    @veiculo = Veiculo.find(params[:id] || params[:veiculo_id])
   end
 end

@@ -9,6 +9,15 @@ class LoginController < UsuariosController
   def login
   end
 
+  def login_pagamento
+    if params[:dias].present? && params[:token].present? && params[:senderHash].present? && params[:veiculo_id].present?
+      @dias = params[:dias]
+      @token = params[:token]
+      @senderHash = params[:senderHash]
+      @veiculo_id = params[:veiculo_id]
+    end
+  end
+
 
   def login_api
     usuario = Usuario.login(login_params[:email], login_params[:senha])

@@ -1,0 +1,35 @@
+<form class="form-signin loginForm" action="/alugar_guest" method="POST">
+  <div class="text-center mb-4">
+    <img class="mb-4" src="/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Logue-se agora</h1>
+  </div>
+
+  <div class="form-label-group">
+    <label for="email">Login</label>
+    <input type="email" id="login" class="form-control" placeholder="Login" required="" autofocus="" name="login">
+  </div>
+
+  <div class="form-label-group">
+    <label for="senha">Senha</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Senha" required="" name="senha">
+  </div>
+  <input type="hidden" value='<%= form_authenticity_token %>' name='authenticity_token'>
+  <input type="hidden" value='<%= @dias %>' name='dias'>
+  <input type="hidden" value='<%= @token %>' name='token'>
+  <input type="hidden" value='<%= @senderHash %>' name='senderHash'>
+  <input type="hidden" value='<%= @veiculo_id %>' name='veiculo_id'>
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Logue-se</button>
+</form>
+<hr>
+<div style="width: 100%; text-align: center;">
+<p style='text-align: center; width: 100%;'> OU </p>
+<a href="/usuarios/new" style='text-align: center; margin: auto; display: inline-block; padding: 8px 25px; color: #fff;' class='btn btn-success'> Cadastre-se </a>
+</div>
+
+<style>
+  .loginForm {
+    max-width: 450px;
+    margin: auto;
+  }
+</style>

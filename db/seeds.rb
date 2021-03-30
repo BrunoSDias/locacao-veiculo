@@ -1,7 +1,22 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+puts " ============== CRIANDO ADMINISTRADOR ============== "
+Administrador.create(nome: "Bruno", login: "brunosdias@outlook.com", senha: "123456")
+puts " ============== ADMINISTRADOR CRIADO ============== "
+
+puts " ============== CRIANDO USUARIO ============== "
+Usuario.create(nome: "Bruno Dias", cpf: "378.412.638-30", cep: "15840-000", estado: "SP", endereco: "Rua Vicente Bochichio", numero: 88)
+puts " ============== USUARIO CRIADO ============== "
+
+puts " ============== CRIANDO MARCAS ============== "
+if marca = Marca.create(nome: "Hyundai")
+  Veiculo.create(nome: "HB20", cor: "Prata", qnt_passageiros: 5, placa: "HSB-1213", valor: 50, marca_id: marca.id)
+end
+
+if marca = Marca.create(nome: "Ford")
+  Veiculo.create(nome: "Ka Sedan", cor: "Azul", qnt_passageiros: 5, placa: "SDV-2156", valor: 40, marca_id:  marca.id)
+end
+
+if marca = Marca.create(nome: "Volkswagen")
+  Veiculo.create(nome: "T-Cross", cor: "Verde", qnt_passageiros: 5, placa: "HSM-1151", valor: 25.30, marca_id:  marca.id)
+end
+
+puts " ============== MARCAS CRIADAS ============== "

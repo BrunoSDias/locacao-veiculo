@@ -1,6 +1,7 @@
 class Usuario < ApplicationRecord
   include BCrypt
   has_many :reservas, dependent: :delete_all
+  validates :nome, :cpf, :login, :senha, :data_nascimento, :endereco, :numero, :estado, :cidade, :complemento, :bairro,  presence: true
 
   def senha
     @senha ||= Password.new(self.hash_senha)

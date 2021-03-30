@@ -1,6 +1,6 @@
 class Administrador < ApplicationRecord
   include BCrypt
-  has_many :reservas, dependent: :delete_all
+  validates :nome, :login, :senha, presence: true
 
   def senha
     @senha ||= Password.new(hash_senha)

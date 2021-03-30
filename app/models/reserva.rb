@@ -4,6 +4,6 @@ class Reserva < ApplicationRecord
 
   STATUS = {
     aguardando: "Aguardando pagamento",
-    pago: "Pago, embalando produto",
+    pago: "Pago",
   }
 end

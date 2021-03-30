@@ -47,7 +47,7 @@
         <% Veiculo.all.each do |veiculo|%>
           <div class="row">
             <div class="col-sm-12">
-              <div class="card h-100">
+              <div class="card" style='margin-top:35px;'>
                 <a href="/loja/locacao/<%= veiculo.id %>">
                   <% if veiculo.foto.attached? %>
                     <%= image_tag veiculo.foto, class: "card-img-top imgCarros" %>

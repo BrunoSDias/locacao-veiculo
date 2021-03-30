@@ -102,6 +102,9 @@
     </form> 
   </div>
 </div>
+<div class='loaderContainer' style='display: none;'>
+  <div class="loader"></div>
+</div>
 
 <script>
   $('.credit_card').mask('0000.0000.0000.0000');
@@ -117,17 +120,34 @@
   function finalizaPagamento(e, valor_veiculo, veiculo_id) {
     e.preventDefault();
     const cardNumber = document.getElementById('cardNumber').value;
+    if (!cardNumber) {
+      alert("Número do cartão não pode ficar em branco");
+      return;
+    }
     const cardNumberFiltered = cardNumber.replaceAll('.', '');
     const bin = cardNumberFiltered.substring(0, 6)
 
     const cardName = document.getElementById('cardName').value;
+    if (!cardName) {
+      alert("Nome no cartão não pode ficar em branco");
+      return;
+    }
 
     const expirationDate = document.getElementById('expirationDate').value;
+    if (!expirationDate) {
+      alert("Data de expiração não pode ficar em branco");
+      return;
+    }
     const expirationMonth = expirationDate.split('-')[1];
     const expirationYear = expirationDate.split('-')[0];
 
     const cvv = document.getElementById('cvv').value;
+    if (!cvv) {
+      alert("CVV não pode ficar em branco");
+      return;
+    }
 
+    document.querySelector(".loaderContainer").style.display = "block";
     const qntDias = document.getElementById('dias').value;
     const valorTotal = valor_veiculo * qntDias;
     PagSeguroDirectPayment.getPaymentMethods({
@@ -158,17 +178,28 @@
                           expirationMonth: expirationMonth, // Mês da expiração do cartão
                           expirationYear: expirationYear, // Ano da expiração do cartão, é necessário os 4 dígitos.
                           success: function(response) {
-                            $.post("/alugar/" + veiculo_id, {
-                              dias: qntDias,
-                              token: response.card.token,
-                              senderHash: hash,
-                            }, function(data, status) {
-                              console.log(data);
-                            })
+                            <% if @usuario_id.present? %>
+                              $.post("/alugar/" + veiculo_id, {
+                                dias: qntDias,
+                                token: response.card.token,
+                                senderHash: hash,
+                              }, function(data, status) {
+
+                                document.querySelector(".loaderContainer").style.display = "none";
+                                console.log(data);
+                              })
+                            <% else %>
+                              window.location.href = "/login_pagamento?veiculo_id=" +
+                              veiculo_id + 
+                              "&dias=" + qntDias +
+                              "&token=" + response.card.token +
+                              "&senderHash=" + hash
+                            <% end %>
                             console.log(response);
                             // Retorna o cartão tokenizado.
                           },
                           error: function(response) {
+                            document.querySelector(".loaderContainer").style.display = "none";
                             alert("Erro ao tentar gerar token de cartão de crédito");
                           },
                           complete: function(response) {
@@ -178,6 +209,7 @@
                         });
                     },
                       error: function(response) {
+                        document.querySelector(".loaderContainer").style.display = "none";
                         alert("Erro ao verificar quantidade de parcelas disponíveis");
                     },
                       complete: function(response){
@@ -186,6 +218,7 @@
                   });
                 },
                 error: function(response) {
+                  document.querySelector(".loaderContainer").style.display = "none";
                   alert("Erro ao checar bandeira de cartão de crédito")
                 },
                 complete: function(response) {
@@ -196,6 +229,7 @@
         });
         },
         error: function(response) {
+          document.querySelector(".loaderContainer").style.display = "none";
           alert("Erro ao gerar Hash de Pagamento");
 
         },
@@ -237,5 +271,40 @@
   .detalhesContainer .card-text {
     font-weight: bold;
     font-size: 1.1em;
+  }
+
+  .loaderContainer {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+  }
+
+  .loader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 35%;
+    margin: auto;
+    border: 12px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 12px solid #43db34;
+    width: 90px;
+    height: 90px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 </style>
