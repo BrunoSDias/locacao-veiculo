@@ -20,9 +20,9 @@ class LoginController < UsuariosController
 
 
   def login_api
-    usuario = Usuario.login(login_params[:email], login_params[:senha])
+    usuario = Usuario.login(login_params[:login], login_params[:senha])
     if usuario.present?
-      render json: {usuario: usuario}, status: :ok
+      render json: {usuario: usuario.encoded}, status: :ok
     else
       render json: {status: "Não tem permissão"}, status: :unauthorized
     end
@@ -33,7 +33,7 @@ class LoginController < UsuariosController
 
     if usuario.present?
       if usuario.senha == params[:senha]
-        cookies[:usuario] = usuario.id
+        cookies[:usuario] = usuario.encoded["id"]
         redirect_to '/'
         return
       end
@@ -48,6 +48,6 @@ class LoginController < UsuariosController
 
   private
   def login_params
-    params.require(:usuario).permit(:email, :senha)
+    params.require(:usuario).permit(:login, :senha)
   end
 end

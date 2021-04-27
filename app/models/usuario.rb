@@ -3,6 +3,12 @@ class Usuario < ApplicationRecord
   has_many :reservas, dependent: :delete_all
   validates :nome, :cpf, :login, :senha, :data_nascimento, :endereco, :numero, :estado, :cidade, :complemento, :bairro,  presence: true
 
+  def encoded
+    usuario = self.as_json
+    usuario["id"] = JsonWebToken.encode(usuario["id"])
+    usuario
+  end
+
   def senha
     @senha ||= Password.new(self.hash_senha)
   end

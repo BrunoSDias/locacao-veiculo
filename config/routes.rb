@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :reservas, only: [:index, :show, :destroy]
   resources :clientes
   resources :veiculos
+  resources :veiculos_usuarios
   resources :marcas
   root "loja#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

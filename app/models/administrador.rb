@@ -2,6 +2,12 @@ class Administrador < ApplicationRecord
   include BCrypt
   validates :nome, :login, :senha, presence: true
 
+  def encoded
+    administrador = self.as_json
+    administrador["id"] = JsonWebToken.encode(administrador["id"])
+    administrador
+  end
+
   def senha
     @senha ||= Password.new(hash_senha)
   end

@@ -2,8 +2,16 @@ class AdministradorsController < ApplicationController
   before_action :authenticate_admin!
 
   def authenticate_admin!
-    if cookies[:administrador].blank?
-      redirect_to '/administrador/login'
+    unless request.path_parameters[:format] == 'json'
+      if cookies[:administrador].present?
+        administrador_id = JsonWebToken.decode(cookies[:usuario])["id"]
+        unless Administrador.find(administrador_id).present?
+            redirect_to '/administrador/login'
+          return
+        end
+      else
+        redirect_to '/administrador/login'
+      end
     end
   end
 

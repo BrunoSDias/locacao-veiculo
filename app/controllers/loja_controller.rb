@@ -1,9 +1,9 @@
 class LojaController < UsuariosController
-  skip_before_action :verify_authenticity_token, only: [:alugar, :finalizar_pagamento]
   before_action :set_veiculo, only: [:aluguel, :alugar, :alugar_guest]
   before_action :set_token_pagamento, only: :aluguel
 
   def index
+    @veiculos = Veiculo.all
   end
 
   def aluguel

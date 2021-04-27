@@ -1,6 +1,38 @@
 class UsuariosController < ApplicationController
   layout "usuarios"
   before_action :set_usuario, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:login, :logar, :login_api]
+
+  def authenticate_user!
+    if request.format.json?
+      unless user_authorized?
+        render json: {}, status: :unauthorized
+      end
+    else
+      if cookies[:usuario].present?
+        usuario_id = JsonWebToken.decode(cookies[:usuario])["id"]
+        unless Usuario.find(usuario_id).present?
+          redirect_to '/login'
+          return
+        end
+      else
+        redirect_to '/login'
+      end
+    end
+  end
+  
+  def user_authorized?
+    if request.headers[:UsuarioToken].present?
+      token = request.headers[:UsuarioToken]
+      usuario_id = JsonWebToken.decode(token)["id"]
+      if Usuario.find(usuario_id).present?
+        return true
+      end
+    end
+    return false
+  end
+
+
 
   # GET /usuarios
   # GET /usuarios.json

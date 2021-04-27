@@ -1,0 +1,39 @@
+<div class="page-header">
+  <%= link_to new_veiculo_path, class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    Novo Veiculo
+  <% end %>
+  <h1>Listando veiculos</h1>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+      <th>Nome</th>
+      <th>Cor</th>
+      <th>Qnt passageiros</th>
+      <th>Placa</th>
+      <th>Valor</th>
+      <th>Marca</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @veiculos) do |veiculo| %>
+            <td><%= veiculo.nome %></td>
+            <td><%= veiculo.cor %></td>
+            <td><%= veiculo.qnt_passageiros %></td>
+            <td><%= veiculo.placa %></td>
+            <td><%= veiculo.valor %></td>
+            <td><%= veiculo.marca.nome %></td>
+            <td><%= link_to 'Mostrar', veiculo %></td>
+        <td><%= link_to 'Editar', edit_veiculo_path(veiculo) %></td>
+        <td><%= link_to 'Remover', veiculo, method: :delete, data: { confirm: 'Tem certeza?' } %></td>
+      <% end %>
+    </tbody>
+  </table>
+</div>
