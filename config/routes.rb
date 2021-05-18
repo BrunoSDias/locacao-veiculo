@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/get_session', to: 'checkout#get_session'
   get 'usuarios_administrador/index'
   get 'login/sigin'
   get 'login/cadastrar'
