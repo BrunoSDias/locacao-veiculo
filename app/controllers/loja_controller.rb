@@ -1,6 +1,7 @@
 class LojaController < UsuariosController
   before_action :set_veiculo, only: [:aluguel, :alugar, :alugar_guest]
   before_action :set_token_pagamento, only: :aluguel
+  skip_before_action :authenticate_user!, only: :alugar
 
   def index
     @veiculos = Veiculo.all
@@ -16,16 +17,34 @@ class LojaController < UsuariosController
       token_pagamento = params[:token]
       hash_comprador = params[:senderHash]
       @valor_total = dias * @veiculo.valor
-      if cookies[:usuario].present?
-        reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: cookies[:usuario])
-        if reserva.save!
-          redirect_to "/confirmacao_pagamento/#{reserva.id}?token_pagamento=#{token_pagamento}&hash_comprador=#{hash_comprador}"
+      if request.format.json?
+        if user_authorized?
+
+          token = request.headers[:UsuarioToken]
+          usuario_id = JsonWebToken.decode(token)["id"]
+
+          reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: usuario_id)
+          if reserva.save!
+            render json: {reserva_id: reserva.id}, status: :ok
+            return
+          end
+        else
+          render json: {}, status: :unauthorized
           return
         end
       else
-        redirect_to "/login"
-        return
+        if cookies[:usuario].present?
+          reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: cookies[:usuario])
+          if reserva.save!
+            redirect_to "/confirmacao_pagamento/#{reserva.id}?token_pagamento=#{token_pagamento}&hash_comprador=#{hash_comprador}"
+            return
+          end
+        else
+          redirect_to "/login"
+          return
+        end
       end
+      
     end
     redirect_to "/loja/locacao/#{@veiculo.id}", notice: 'Houve um erro ao ir a tela de confirmação'
   end
