@@ -25,7 +25,7 @@ class LojaController < UsuariosController
 
           reserva = Reserva.new(reservado_de: Time.now, reservado_ate: Time.now + dias.days, valor_alugado: @valor_total, status: Reserva::STATUS[:aguardando], veiculo_id: @veiculo.id, usuario_id: usuario_id)
           if reserva.save!
-            render json: {reserva_id: reserva.id}, status: :ok
+            render json: reserva, status: :ok
             return
           end
         else
@@ -130,7 +130,11 @@ class LojaController < UsuariosController
       
       if response.code == 200
         reserva.update(status: Reserva::STATUS[:pago])
-        redirect_to "/finalizado?reserva_id=#{reserva.id}"
+        if request.format.json?
+          render json: {}, status: 200
+        else
+          redirect_to "/finalizado?reserva_id=#{reserva.id}"
+        end
       end
 
       puts response
